@@ -1,0 +1,26 @@
+        // Setup the route parameters
+        const routeParams = new RouteParameters({
+          // An authorization string used to access the routing service
+          apiKey: "AAPKd428b4c3f502464887372fa13874a01c5AdNgFvcLWX03_lCIh5zTL-oHvsfWDoWaOnKHkZHThdCzbE0i8m-cJAbdeESQEl-",
+          stops: new FeatureSet(),
+          outSpatialReference: {
+            // autocasts as new SpatialReference()
+            wkid: 3857
+          }
+        });
+function addStop(event) {
+  const stop = new Graphic(event.mapPoint, stopSymbol);
+  graphicsLayer.add(stop);
+  routeParams.stops.features.push(stop);
+
+  if (routeParams.stops.features.length >= 2) {
+    route.solve(routeUrl, routeParams).then(showRoute);
+    lastStop = routeParams.stops.features.splice(0, 1)[0];
+  }
+}
+route.solve(routeUrl, routeParams).then(showRoute);
+function showRoute(data) {
+  const routeResult = data.routeResults[0].route;
+  routeResult.symbol = routeSymbol;
+  graphicsLayer.add(routeResult);
+}
