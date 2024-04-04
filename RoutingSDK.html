@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>ArcGIS Routing Example</title>
+  <style>
+    #viewDiv {
+      height: 100vh;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script src="https://js.arcgis.com/4.24/"></script>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
+require([
+  "esri/Map",
+  "esri/views/MapView",
+  "esri/tasks/RouteTask",
+  "esri/tasks/support/RouteParameters",
+  "esri/tasks/support/FeatureSet",
+  "esri/layers/FeatureLayer"
+], function(Map, MapView, RouteTask, RouteParameters, FeatureSet, FeatureLayer) {
+  const map = new Map({
+    basemap: "streets-navigation-vector"
+  });
+
+  const view = new MapView({
+    container: "viewDiv",
+    map: map,
+    center: [-118.805, 34.027], // Long Beach, CA
+    zoom: 12
+  });
+
+  view.when(() => {
+    // Load the feature layers for stops and routes from ArcGIS Online
+    const stopsLayer = new FeatureLayer({
+      url: "https://fleming.maps.arcgis.com/home/item.html?id=42c402d6b9fd416d9398757c165000ea"
+    });
+
+    const routesLayer = new FeatureLayer({
+      url: "URL_TO_YOUR_ROUTES_FEATURE_LAYER"
+    });
+
+    // Add the feature layers to the map
+    map.addMany([stopsLayer, routesLayer]);
+
+    // Create a RouteTask using the ArcGIS Online routing service
+    const routeTask = new RouteTask({
+      url: "https://fleming.maps.arcgis.com/home/item.html?id=5e026504b74e4020aab390946c702bf3"
+    });
+
+    // Set up the route parameters
+    const params = new RouteParameters({
+      stops: new FeatureSet({ features: stopsLayer.graphics.toArray() }),
+      returnDirections: true
+    });
+
+    // Solve the route using the route task
+    routeTask.solve(params).then(result => {
+      // Handle the routing result
+      console.log(result);
+    }).catch(error => {
+      // Handle routing error
+      console.error(error);
+    });
+  });
+});
