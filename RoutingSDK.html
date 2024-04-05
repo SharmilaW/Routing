@@ -88,3 +88,27 @@ apiKey: "AAPKd428b4c3f502464887372fa13874a01c5AdNgFvcLWX03_lCIh5zTL-oHvsfWDoWaOn
     });
   });
 });
+routeTask.solve(params).then(result => {
+  // Extract route geometry from the routing result
+  const routeGeometry = result.routeResults[0].route.geometry;
+
+  // Create a graphic for the route geometry
+  const routeGraphic = new Graphic({
+    geometry: routeGeometry,
+    symbol: {
+      type: "simple-line",
+      color: [0, 0, 255, 0.5], // Blue color with 50% transparency
+      width: 5 // Adjust line width as needed
+    }
+  });
+
+  // Create a graphics layer for displaying the route
+  const routeLayer = new GraphicsLayer();
+  map.add(routeLayer);
+
+  // Add the route graphic to the graphics layer
+  routeLayer.add(routeGraphic);
+}).catch(error => {
+  // Handle routing error
+  console.error(error);
+});
