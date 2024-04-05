@@ -1,114 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>ArcGIS Routing Example</title>
-  <style>
-    #viewDiv {
-      height: 100vh;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <script src="https://js.arcgis.com/4.24/"></script>
- 
-</head>
-<body>
-  <div id="viewDiv"></div>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Canadian Rockies Mountain Parks</title>
+    <style>
+      html, body, #viewDiv{
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #head{
+        height: 90px;
+        position: absolute;
+        z-index: 1;
+        left: 30%;
+        background-color: rgba(136, 191, 255, 0.247);
+        text-align: center;
+      }
+      </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.28/"></script>
+
+    <script>
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+
+      "esri/layers/FeatureLayer"
+
+    ], function(esriConfig, Map, MapView, FeatureLayer) {
+
+    //esriConfig.apiKey = "";
+
+    const map = new Map({
+      basemap: "oceans"
+    });
+
+    const view = new MapView({
+      container: "viewDiv",
+      map: map,
+      center: [-117.54785295110092,52.454615104267646], 
+      zoom: 7
+    });
+
+  // feature layer (Polygon)
+    const rockiesLayer = new FeatureLayer({
+      url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Routes/FeatureServer"
+    });
+
+    map.add(rockiesLayer);
+
+  // feature layer (Points)
+    const ParknameLayer = new FeatureLayer({
+      url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orange_Stop/FeatureServer"
+    });
+
+    map.add(ParknameLayer, 1);
+
+
+    
+    });
+  </script>
+
+  </head>
+  <body>
+        <div id = "head">
+          <h1>Exploring Canadian Rockies Mountain Parks </h1>
+        </div>
+          
+
+    <div id="viewDiv"></div>
+  </body>
 </html>
-require([
-  "esri/Map",
-  "esri/views/MapView",
-  "esri/Graphic",
-  "esri/layers/GraphicsLayer",
-  "esri/tasks/RouteTask",
-  "esri/tasks/support/RouteParameters",
-  "esri/tasks/support/FeatureSet",
-  "dojo/domReady!"
-], function(Map, MapView, Graphic, GraphicsLayer, RouteTask, RouteParameters, FeatureSet) {
-  const map = new Map({
-    basemap: "streets-navigation-vector"
-  });
-
-  const view = new MapView({
-    container: "viewDiv",
-    map: map,
-    center: [-78.753766209999981,44.357250000000079], // Adjust to your desired center
-    zoom: 12
-  });
-
-  view.when(() => {
-    const stopsLayer = new GraphicsLayer();
-    map.add(stopsLayer);
-apiKey: "AAPKd428b4c3f502464887372fa13874a01c5AdNgFvcLWX03_lCIh5zTL-oHvsfWDoWaOnKHkZHThdCzbE0i8m-cJAbdeESQEl-",
-
-    // Load stops GeoJSON data and add graphics to stopsLayer
-    const stopsGeoJSON = {
-  "type" : "FeatureCollection",
-  "features" : [{"type":"Feature","id":1,"geometry":{"type":"Point","coordinates":[-78.753766209999981,44.357250000000079]},"properties":{"OBJECTID":1,"stop_id":404,"stop_name":"Angeline Street at Chadwin Drive","stop_lat":44.357250000000001,"stop_lon":-78.753766209999995,"wheelchair_boarding":0,"Time":"00:05"}},{"type":"Feature","id":2,"geometry":{"type":"Point","coordinates":[-78.760199999999941,44.370772200000033]},"properties":{"OBJECTID":2,"stop_id":405,"stop_name":"Angeline Street at Alcorn Drive","stop_lat":44.370772199999998,"stop_lon":-78.760199999999998,"wheelchair_boarding":0,"Time":"00:10"}},{"type":"Feature","id":3,"geometry":{"type":"Point","coordinates":[-78.761107949999939,44.374289630000078]},"properties":{"OBJECTID":3,"stop_id":406,"stop_name":"Springdale Drive at Angeline Street","stop_lat":44.37428963,"stop_lon":-78.761107949999996,"wheelchair_boarding":0,"Time":"00:11"}},{"type":"Feature","id":4,"geometry":{"type":"Point","coordinates":[-78.757717019999973,44.37505340000007]},"properties":{"OBJECTID":4,"stop_id":407,"stop_name":"Springdale Drive at Newton Avenue","stop_lat":44.375053399999999,"stop_lon":-78.757717020000001,"wheelchair_boarding":0,"Time":"00:12"}},{"type":"Feature","id":5,"geometry":{"type":"Point","coordinates":[-78.755692849999946,44.374729020000075]},"properties":{"OBJECTID":5,"stop_id":408,"stop_name":"Springdale Drive at Champlain Boulevard","stop_lat":44.374729019999997,"stop_lon":-78.755692850000003,"wheelchair_boarding":0,"Time":"00:13"}},{"type":"Feature","id":6,"geometry":{"type":"Point","coordinates":[-78.753283099999976,44.375426600000026]},"properties":{"OBJECTID":6,"stop_id":409,"stop_name":"Mohawk Drive at Champlain Boulevard","stop_lat":44.375426599999997,"stop_lon":-78.753283100000004,"wheelchair_boarding":0,"Time":"00:14"}},{"type":"Feature","id":7,"geometry":{"type":"Point","coordinates":[-78.751524439999969,44.377531290000036]},"properties":{"OBJECTID":7,"stop_id":410,"stop_name":"Mohawk Drive at Highland Court","stop_lat":44.37753129,"stop_lon":-78.751524439999997,"wheelchair_boarding":0,"Time":"00:15"}},{"type":"Feature","id":8,"geometry":{"type":"Point","coordinates":[-78.749972539999987,44.37713264000007]},"properties":{"OBJECTID":8,"stop_id":411,"stop_name":"Champlain Boulevard at William Street","stop_lat":44.377132639999999,"stop_lon":-78.749972540000002,"wheelchair_boarding":0,"Time":"00:16"}},{"type":"Feature","id":9,"geometry":{"type":"Point","coordinates":[-78.751622669999961,44.37604151000005]},"properties":{"OBJECTID":9,"stop_id":412,"stop_name":"Springdale Gardens Park","stop_lat":44.37604151,"stop_lon":-78.751622670000003,"wheelchair_boarding":0,"Time":"00:17"}},{"type":"Feature","id":10,"geometry":{"type":"Point","coordinates":[-78.761003739999978,44.374490510000044]},"properties":{"OBJECTID":10,"stop_id":413,"stop_name":"Angeline Street at Springdale Drive","stop_lat":44.374490510000001,"stop_lon":-78.761003740000007,"wheelchair_boarding":0,"Time":"00:19"}},{"type":"Feature","id":11,"geometry":{"type":"Point","coordinates":[-78.760201129999984,44.370772620000025]},"properties":{"OBJECTID":11,"stop_id":414,"stop_name":"Angeline Street at Alcorn Drive","stop_lat":44.370772619999997,"stop_lon":-78.760201129999999,"wheelchair_boarding":0,"Time":"00:10"}},{"type":"Feature","id":12,"geometry":{"type":"Point","coordinates":[-78.756392189999985,44.362516930000027]},"properties":{"OBJECTID":12,"stop_id":415,"stop_name":"Angeline Street at Connolly Road","stop_lat":44.362516929999998,"stop_lon":-78.75639219,"wheelchair_boarding":0,"Time":"00:21"}},{"type":"Feature","id":13,"geometry":{"type":"Point","coordinates":[-78.745760099999984,44.352891810000074]},"properties":{"OBJECTID":13,"stop_id":416,"stop_name":"Kent Street at Albert Street","stop_lat":44.352891810000003,"stop_lon":-78.745760099999998,"wheelchair_boarding":0,"Time":"00:30"}},{"type":"Feature","id":14,"geometry":{"type":"Point","coordinates":[-78.736311629999989,44.35384023000006]},"properties":{"OBJECTID":14,"stop_id":417,"stop_name":" William Street at Russell Street ","stop_lat":44.353840230000003,"stop_lon":-78.736311630000003,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":15,"geometry":{"type":"Point","coordinates":[-78.733616309999945,44.351777480000067]},"properties":{"OBJECTID":15,"stop_id":418,"stop_name":"Melbourne Street at William Street","stop_lat":44.351777480000003,"stop_lon":-78.733616310000002,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":16,"geometry":{"type":"Point","coordinates":[-78.739735129999985,44.350346520000073]},"properties":{"OBJECTID":16,"stop_id":419,"stop_name":"Melbourne Street West","stop_lat":44.350346520000002,"stop_lon":-78.73973513,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":17,"geometry":{"type":"Point","coordinates":[-78.742745749999983,44.348729000000048]},"properties":{"OBJECTID":17,"stop_id":420,"stop_name":"Albert Street at Durham Street","stop_lat":44.348728999999999,"stop_lon":-78.742745749999997,"wheelchair_boarding":0,"Time":"00:36"}},{"type":"Feature","id":18,"geometry":{"type":"Point","coordinates":[-78.741007909999951,44.344829950000076]},"properties":{"OBJECTID":18,"stop_id":421,"stop_name":"Albert Street at Mary Street","stop_lat":44.344829949999998,"stop_lon":-78.741007909999993,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":19,"geometry":{"type":"Point","coordinates":[-78.740684619999968,44.341694290000078]},"properties":{"OBJECTID":19,"stop_id":422,"stop_name":"Fleming College","stop_lat":44.34169429,"stop_lon":-78.740684619999996,"wheelchair_boarding":0,"Time":"00:38"}},{"type":"Feature","id":20,"geometry":{"type":"Point","coordinates":[-78.743056109999941,44.341906590000065]},"properties":{"OBJECTID":20,"stop_id":423,"stop_name":"Lindsay Recreational Centre","stop_lat":44.341906590000001,"stop_lon":-78.743056109999998,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":21,"geometry":{"type":"Point","coordinates":[-78.741213699999946,44.345683000000065]},"properties":{"OBJECTID":21,"stop_id":424,"stop_name":"Albert Street","stop_lat":44.345683000000001,"stop_lon":-78.741213700000003,"wheelchair_boarding":0,"Time":null}},{"type":"Feature","id":22,"geometry":{"type":"Point","coordinates":[-78.742198799999983,44.347934190000046]},"properties":{"OBJECTID":22,"stop_id":425,"stop_name":"Albert Street at Durham Street","stop_lat":44.347934189999997,"stop_lon":-78.742198799999997,"wheelchair_boarding":0,"Time":"00:36"}},{"type":"Feature","id":23,"geometry":{"type":"Point","coordinates":[-78.739797349999947,44.350195310000061]},"properties":{"OBJECTID":23,"stop_id":426,"stop_name":"Melbourne Street at Victoria Avenue","stop_lat":44.350195309999997,"stop_lon":-78.739797350000003,"wheelchair_boarding":0,"Time":"00:42"}},{"type":"Feature","id":24,"geometry":{"type":"Point","coordinates":[-78.733334239999976,44.351740200000052]},"properties":{"OBJECTID":24,"stop_id":427,"stop_name":"Melbourne Street at Lindsay Street","stop_lat":44.351740200000002,"stop_lon":-78.733334240000005,"wheelchair_boarding":0,"Time":"00:43"}},{"type":"Feature","id":25,"geometry":{"type":"Point","coordinates":[-78.736301399999945,44.353841230000057]},"properties":{"OBJECTID":25,"stop_id":428,"stop_name":"William Street at Russell Street","stop_lat":44.35384123,"stop_lon":-78.736301400000002,"wheelchair_boarding":0,"Time":"00:44"}},{"type":"Feature","id":26,"geometry":{"type":"Point","coordinates":[-78.746255529999985,44.352946940000038]},"properties":{"OBJECTID":26,"stop_id":429,"stop_name":"Kent Street at LCVI","stop_lat":44.352946940000002,"stop_lon":-78.746255529999999,"wheelchair_boarding":0,"Time":"00:02"}},{"type":"Feature","id":27,"geometry":{"type":"Point","coordinates":[-78.757246579999958,44.350771790000067]},"properties":{"OBJECTID":27,"stop_id":430,"stop_name":"Kent Street at Government Building","stop_lat":44.350771790000003,"stop_lon":-78.75724658,"wheelchair_boarding":0,"Time":"00:24"}},{"type":"Feature","id":28,"geometry":{"type":"Point","coordinates":[-78.75953211999996,44.350273080000079]},"properties":{"OBJECTID":28,"stop_id":431,"stop_name":"Whitney Town Centre","stop_lat":44.350273080000001,"stop_lon":-78.759532120000003,"wheelchair_boarding":0,"Time":"00:25"}},{"type":"Feature","id":29,"geometry":{"type":"Point","coordinates":[-78.760405979999973,44.348976070000049]},"properties":{"OBJECTID":29,"stop_id":432,"stop_name":"Lindsay Square Mall","stop_lat":44.348976069999999,"stop_lon":-78.760405980000002,"wheelchair_boarding":0,"Time":"00:26"}},{"type":"Feature","id":30,"geometry":{"type":"Point","coordinates":[-78.756179619999955,44.350814390000039]},"properties":{"OBJECTID":30,"stop_id":433,"stop_name":"Kent Street at A & W","stop_lat":44.350814389999996,"stop_lon":-78.756179619999997,"wheelchair_boarding":0,"Time":"00:28"}},{"type":"Feature","id":31,"geometry":{"type":"Point","coordinates":[-78.753046489999974,44.351514630000054]},"properties":{"OBJECTID":31,"stop_id":434,"stop_name":"Kent Street at Eggsmart","stop_lat":44.351514629999997,"stop_lon":-78.753046490000003,"wheelchair_boarding":0,"Time":"00:53"}},{"type":"Feature","id":32,"geometry":{"type":"Point","coordinates":[-78.745803849999959,44.352893090000066]},"properties":{"OBJECTID":32,"stop_id":435,"stop_name":"Kent Street at Albert Street","stop_lat":44.352893090000002,"stop_lon":-78.745803850000001,"wheelchair_boarding":0,"Time":"00:30"}},{"type":"Feature","id":33,"geometry":{"type":"Point","coordinates":[-78.740635229999953,44.353889320000064]},"properties":{"OBJECTID":33,"stop_id":436,"stop_name":"Victoria Avenue at Kent Street","stop_lat":44.35388932,"stop_lon":-78.740635229999995,"wheelchair_boarding":0,"Time":"00:00"}}]
-};
-    stopsGeoJSON.features.forEach(feature => {
-      stopsLayer.add(new Graphic({
-        geometry: feature.geometry,
-        symbol: {
-          type: "simple-marker",
-          color: "blue",
-          size: "8px"
-        }
-      }));
-    });
-
-    // Load routes GeoJSON data and create FeatureSet for routing
-    const routesGeoJSON = {
-  "type" : "FeatureCollection",
-  "features" : [{"type":"Feature","id":4,"geometry":{"type":"MultiLineString","coordinates":[[[-78.756307793198474,44.375316323986553],[-78.756311111186577,44.375319399716126],[-78.756319059594702,44.375319781892784],[-78.756307793198474,44.375316323986553]],[[-78.753206531082526,44.375219780753575],[-78.752416667023056,44.375519400263329],[-78.750927699455545,44.376352799847325],[-78.749755556168409,44.377066699700798],[-78.750374999460561,44.377525000134639],[-78.750708333607022,44.377766700040389],[-78.75399444501879,44.377308300091116],[-78.753994444847677,44.377041699714468],[-78.753206531082526,44.375219780753575]],[[-78.753274897338557,44.375193846921427],[-78.753202777485072,44.375211100247171],[-78.753206531082526,44.375219780753575],[-78.753274897338557,44.375193846921427]],[[-78.753537955711352,44.375130913069462],[-78.753280555054047,44.375191700369818],[-78.753274897338557,44.375193846921427],[-78.753537955711352,44.375130913069462]],[[-78.755574999594856,44.37464440021737],[-78.754433333337076,44.374916699707533],[-78.753537955711352,44.375130913069462],[-78.755577484520302,44.374649237635978],[-78.755730556058325,44.374947199647181],[-78.756055556056936,44.375238899762159],[-78.756307793198474,44.375316323986553],[-78.755586111487517,44.374647199758023],[-78.755577484520302,44.374649237635978],[-78.755574999594856,44.37464440021737]],[[-78.760874227408465,44.374426461848685],[-78.75951111136024,44.374719400104844],[-78.757444444328982,44.375166700352572],[-78.756439003632707,44.37532554929075],[-78.756319059594702,44.375319781892784],[-78.756372221667505,44.375336099833227],[-78.756439003632707,44.37532554929075],[-78.75671666680401,44.375338899991931],[-78.760247222643088,44.374586100272609],[-78.760874227408465,44.374426461848685]],[[-78.76169422293863,44.374217680190199],[-78.760874227408465,44.374426461848685],[-78.761708333333175,44.374247199594436],[-78.76169422293863,44.374217680190199]],[[-78.740674999666425,44.3538443997382],[-78.740784707741909,44.354087760736363],[-78.740787522488304,44.35408709891427],[-78.740827777265721,44.354183299788858],[-78.742075000029359,44.353874999888511],[-78.744138888761213,44.35341670018272],[-78.747265577853852,44.352621816653148],[-78.745016666331608,44.35312499962955],[-78.740886111458039,44.354063899627285],[-78.740787522488304,44.35408709891427],[-78.740272222375225,44.352855600084098],[-78.736402778211144,44.353716699762913]],[[-78.750595098972084,44.351876755228162],[-78.749722221712446,44.351997200330267],[-78.747265577853852,44.352621816653148],[-78.750595098972084,44.351876755228162]],[[-78.752688888993404,44.351752800386521],[-78.755902778048338,44.350994399840253],[-78.762161111081625,44.349566699924914],[-78.761758333649652,44.34867779998558],[-78.759316666228415,44.349258300007904],[-78.759697222111868,44.350055600245412],[-78.755925000570628,44.350880600240089],[-78.752266667192046,44.351713899748994],[-78.751236111305275,44.351733299845392],[-78.750595098972084,44.351876755228162],[-78.75135277809747,44.35177220039607],[-78.7518583327318,44.352977799725892],[-78.75292500007059,44.355280599933828],[-78.753788889372728,44.357180600263305],[-78.754177777371112,44.3580055997842],[-78.7550833328132,44.359988899882403],[-78.756402777659076,44.36291389998911],[-78.75711666612537,44.364491699595632],[-78.758730555799744,44.367886100402139],[-78.759888888398038,44.370411099956925],[-78.760683332770469,44.372102799900567],[-78.76169422293863,44.374217680190199],[-78.761741667204518,44.374205599560206],[-78.756061000094604,44.361961100266946],[-78.753261110925649,44.355858300086069],[-78.752019444603121,44.353091700114241],[-78.751463889194852,44.351819400012829],[-78.752688888993404,44.351752800386521],[-78.75135277809747,44.35177220039607]],[[-78.740827777265721,44.354183299788858],[-78.740784707741909,44.354087760736363],[-78.737013888942414,44.354974999603002],[-78.736402778211144,44.353716699762913],[-78.73417777758408,44.354200000043548],[-78.733124999889881,44.351811099858217],[-78.739155555495628,44.350469400211779],[-78.743041666482142,44.349524999969667],[-78.740800000319837,44.344547199967998]],[[-78.741786110780353,44.341372200195096],[-78.741419444784526,44.341452800022992],[-78.740891666646647,44.341569399973714],[-78.740227777312214,44.341863899640217],[-78.740019444825975,44.342297200290922],[-78.739947222486137,44.342675000023654],[-78.740800000319837,44.344547199967998],[-78.742427777202934,44.344111099912354],[-78.744086111483838,44.343719399693093],[-78.74381666695362,44.343108300394682],[-78.743341667187337,44.3420028000968],[-78.742550000269375,44.341636100377315],[-78.741786110780353,44.341372200195096]]]},"properties":{"OBJECTID":4,"shape_id":"1003149","route_id":"7","route_short_name":"Orange","route_long_name":"Orange Line","route_type":"3","route_color":"000000","route_text_color":"FFFFFF","route_type_text":"Bus","Shape_Length":15489.665593566599}}]
-};
-    const routeFeatureSet = new FeatureSet({
-      features: routesGeoJSON.features.map(feature => new Graphic({ geometry: feature.geometry }))
-    });
-
-    const routeTask = new RouteTask({
-      url: "https://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
-    });
-
-    const params = new RouteParameters({
-      stops: new FeatureSet(stopsLayer.graphics.toArray()),
-      returnDirections: true
-    });
-
-    routeTask.solve(params).then(result => {
-      // Handle routing result, e.g., display route on the map
-      console.log(result);
-    }).catch(error => {
-      // Handle routing error
-      console.error(error);
-    });
-  });
-});
-routeTask.solve(params).then(result => {
-  // Extract route geometry from the routing result
-  const routeGeometry = result.routeResults[0].route.geometry;
-
-  // Create a graphic for the route geometry
-  const routeGraphic = new Graphic({
-    geometry: routeGeometry,
-    symbol: {
-      type: "simple-line",
-      color: [0, 0, 255, 0.5], // Blue color with 50% transparency
-      width: 5 // Adjust line width as needed
-    }
-  });
-
-  // Create a graphics layer for displaying the route
-  const routeLayer = new GraphicsLayer();
-  map.add(routeLayer);
-
-  // Add the route graphic to the graphics layer
-  routeLayer.add(routeGraphic);
-}).catch(error => {
-  // Handle routing error
-  console.error(error);
-});
