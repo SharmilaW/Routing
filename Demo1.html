@@ -33,16 +33,16 @@
       "esri/views/MapView",
       "esri/Graphic",
       "esri/layers/GraphicsLayer",
-      "esri/rest/route",
-      "esri/rest/support/RouteParameters",
-      "esri/rest/support/FeatureSet"
-    ], function(Map, MapView, Graphic, GraphicsLayer, route, RouteParameters, FeatureSet) {
+      "esri/tasks/RouteTask",
+      "esri/tasks/support/RouteParameters",
+      "esri/tasks/support/FeatureSet"
+    ], function(Map, MapView, Graphic, GraphicsLayer, RouteTask, RouteParameters, FeatureSet) {
 
       // Specify the URL of your route feature layer
-      const routeFeatureLayerUrl = "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Orange/FeatureServer";
+      const routeFeatureLayerUrl = "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Orange/FeatureServer/0";
 
       // Specify the URL of your stop feature layer
-      const stopFeatureLayerUrl = "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orangestop/FeatureServer";
+      const stopFeatureLayerUrl = "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orangestop/FeatureServer/0";
 
       // The route result will be stored in this layer
       const routeLayer = new GraphicsLayer();
@@ -110,7 +110,10 @@
               // Execute the route if 2 or more stops are input
               routeParams.stops.features.push(stop);
               if (routeParams.stops.features.length >= 2) {
-                route.solve(routeUrl, routeParams).then(showRoute);
+                const routeTask = new RouteTask({
+                  url: routeFeatureLayerUrl
+                });
+                routeTask.solve(routeParams).then(showRoute);
               }
             }
           });
