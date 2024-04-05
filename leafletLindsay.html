@@ -66,9 +66,11 @@
 
       map.setView([44.6532, -78.3832], 13); // Lindsay
 
-      L.esri.Vector.vectorBasemapLayer(basemapEnum, {
-        apiKey: apiKey
-      }).addTo(map);
+     // Inserting OSM basemap
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
 
       const directions = document.createElement("div");
       directions.id = "directions";
