@@ -86,17 +86,12 @@
 
       // Load route feature layer and stop feature layer
       Promise.all([
-        view.whenLayerView(routeLayer),
         routeLayer.load(),
-        view.whenLayerView(stopLayer),
         stopLayer.load()
       ]).then(function(results) {
-        const routeLayerView = results[0];
-        const stopLayerView = results[2];
-
         // Adds a graphic when the user clicks the map. If 2 or more points exist, route is solved.
         view.on("click", function(event) {
-          stopLayerView.queryFeatures({
+          stopLayer.queryFeatures({
             geometry: event.mapPoint,
             spatialRelationship: "intersects"
           }).then(function(response) {
