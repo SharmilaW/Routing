@@ -30,6 +30,10 @@
       "esri/views/MapView",
 
       "esri/layers/FeatureLayer"
+      "esri/layers/graphic"
+      "esri/layers/Graphicslayer"
+      "esri/layers/route"
+      "esri/layers/RouteParameters"
 
     ], function(esriConfig, Map, MapView, FeatureLayer, graphic, Graphicslayer, route, RouteParameters) {
 
@@ -52,7 +56,7 @@
     // Setup the route parameters
     const routeParams = new RouteParameters({
       // An authorization string used to access the routing service
-      apiKey: "%YOUR_API_KEY%"
+      apiKey: "AAPKd428b4c3f502464887372fa13874a01c5AdNgFvcLWX03_lCIh5zTL-oHvsfWDoWaOnKHkZHThdCzbE0i8m-cJAbdeESQEl-"
 ,
       stops: new FeatureSet(),
       outSpatialReference: {
