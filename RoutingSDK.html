@@ -34,7 +34,7 @@
   
     
 
-    ], function(esriConfig, Map, MapView, FeatureLayer, graphic, Graphicslayer, route, RouteParameters) {
+    ], function(esriConfig, Map, MapView, FeatureLayer, ) {
 
     //esriConfig.apiKey = "";
 
@@ -49,65 +49,25 @@
       zoom: 12
     });
 
-  // The stops and route result will be stored in this layer
-    const routeLayer = new GraphicsLayer();
-
-    // Setup the route parameters
-    const routeParams = new RouteParameters({
-      // An authorization string used to access the routing service
-      apiKey: "AAPKd428b4c3f502464887372fa13874a01c5AdNgFvcLWX03_lCIh5zTL-oHvsfWDoWaOnKHkZHThdCzbE0i8m-cJAbdeESQEl-"
-,
-      stops: new FeatureSet(),
-      outSpatialReference: {
-        // autocasts as new SpatialReference()
-        wkid: 3857
-      }
+  // feature layer (Polygon)
+    const routeLayer = new FeatureLayer({
+      url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Orange/FeatureServer"
     });
 
-    // Define the symbology used to display the stops
-    const stopSymbol = {
-      type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-      style: "cross",
-      size: 15,
-      outline: {
-        // autocasts as new SimpleLineSymbol()
-        width: 4
-      }
-    };
+    map.add(routeLayer);
 
-    // Define the symbology used to display the route
-    const routeSymbol = {
-      type: "simple-line", // autocasts as SimpleLineSymbol()
-      color: [0, 0, 255, 0.5],
-      width: 5
-    };
+  // feature layer (Points)
+    const stopLayer = new FeatureLayer({
+      url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orangestop/FeatureServer"
+    });
 
-    // Adds a graphic when the user clicks the map. If 2 or more points exist, route is solved.
-    view.on("click", addStop);
+    map.add(stopLayer, 1);
 
-    function addStop(event) {
-      // Add a point at the location of the map click
-      const stop = new Graphic({
-        geometry: event.mapPoint,
-        symbol: stopSymbol
-      });
-      routeLayer.add(stop);
 
-      // Execute the route if 2 or more stops are input
-      routeParams.stops.features.push(stop);
-      if (routeParams.stops.features.length >= 2) {
-        route.solve(routeUrl, routeParams).then(showRoute);
-      }
-    }
-    // Adds the solved route to the map as a graphic
-    function showRoute(data) {
-      const routeResult = data.routeResults[0].route;
-      routeResult.symbol = routeSymbol;
-      routeLayer.add(routeResult);
-    }
+    
     });
   </script>
-
+  
   </head>
   <body>
         <div id = "head">
