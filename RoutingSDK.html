@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Canadian Rockies Mountain Parks</title>
+    <title>Lindsay Transit Orange Line</title>
     <style>
       html, body, #viewDiv{
         padding: 0;
@@ -43,22 +43,22 @@
       container: "viewDiv",
       map: map,
       center: [-78.753766209999981,44.357250000000079],
-      zoom: 20
+      zoom: 10
     });
 
   // feature layer (Polyline)
-    const rockiesLayer = new FeatureLayer({
+    const routeLayer = new FeatureLayer({
       url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Orange/FeatureServer"
     });
 
-    map.add(rockiesLayer);
+    map.add(routeLayer);
 
   // feature layer (Points)
-    const ParknameLayer = new FeatureLayer({
+    const stopeLayer = new FeatureLayer({
       url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orangestop/FeatureServer"
     });
 
-    map.add(ParknameLayer, 1);
+    map.add(stopLayer, 1);
 
 
     
@@ -68,7 +68,7 @@
   </head>
   <body>
         <div id = "head">
-          <h1>Exploring Canadian Rockies Mountain Parks </h1>
+          <h1>Routing Orange Line</h1>
         </div>
           
 
