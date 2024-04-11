@@ -51,7 +51,7 @@
 
   // feature layer (Polygon)
     const routeLayer = new FeatureLayer({
-      url: "https://fleming.maps.arcgis.com/home/item.html?id=2588bde599fe48499f9fc49de7ba4b6f"
+      url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Lindsay_Transit_Orange/FeatureServer"
     });
 
     map.add(routeLayer);
@@ -59,8 +59,12 @@
   // feature layer (Points)
     const stopLayer = new FeatureLayer({
       url: "https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Orangestop/FeatureServer"
+      url:"https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Hub_Bluestop/FeatureServer"
     });
-
+// feature layer (Points)
+    const stopLayer = new FeatureLayer({
+      url:"https://services1.arcgis.com/pMeXRvgWClLJZr3s/arcgis/rest/services/Hub_Bluestop/FeatureServer"
+    });
     map.add(stopLayer, 1);
 
 
